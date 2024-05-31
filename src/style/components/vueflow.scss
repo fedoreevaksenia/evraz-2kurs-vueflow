@@ -122,8 +122,8 @@
 
         &:hover {
             .node-helper {
-                display:          block;
-                background-color: red;
+                display: block;
+                border:  1px solid red;
             }
         }
     }
@@ -135,6 +135,18 @@
         right:    -20px;
         bottom:   -20px;
         top:      -20px;
+
+        &__actions {
+            position:     absolute;
+            top:          0;
+            left:         100%;
+            padding-left: 8px;
+            text-align:   left;
+        }
+
+        &__action {
+            margin-bottom: 8px;
+        }
     }
 }
 
