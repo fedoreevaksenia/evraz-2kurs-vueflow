@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import {
     VueFlow,
     useVueFlow,
@@ -32,32 +32,7 @@ const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 // our dark mode toggle flag
 const dark = ref(false);
 
-const initialNodes = ref([
-    // {
-    //     id:             '1',
-    //     position:       { x: 50, y: 50 },
-    //     label:          'Node 1',
-    //     type:           'custom', // You can omit this as it's the fallback type
-    //     targetPosition: Position.Top, // or Bottom, Left, Right,
-    //     sourcePosition: Position.Bottom, // or Top, Left, Right,
-    // },
-    // {
-    //     id:             '1',
-    //     position:       { x: 50, y: 50 },
-    //     label:          'Node 1',
-    //     type:           'output', // You can omit this as it's the fallback type
-    //     targetPosition: Position.Top, // or Bottom, Left, Right,
-    //     sourcePosition: Position.Bottom, // or Top, Left, Right,
-    // },
-    // {
-    //     id:             '2',
-    //     position:       { x: 250, y: 250 },
-    //     label:          'Node 2',
-    //     type:           'default', // You can omit this as it's the fallback type
-    //     targetPosition: Position.Top, // or Bottom, Left, Right,
-    //     sourcePosition: Position.Bottom, // or Top, Left, Right,
-    // },
-]);
+const initialNodes = ref([]);
 
 const initialEdges = ref([
     // {
@@ -92,8 +67,37 @@ function onAddNodes() {
 }
 
 // remove a single node from the graph
-function onRemoveNode() {
-    removeNodes('1');
+function onRemoveNode(id) {
+	const canRemove = confirm('Вы уверены, что хотите удалить этот блок?');
+	if (canRemove) {
+		removeNodes(id);
+	}
+}
+
+// Функция редактирования блока
+function onEditNode(id) {
+	const node = findNode(id);
+	const blockName = prompt('Введите новое название для блока');
+	if (blockName) {
+		node.label = blockName;
+	}
+}
+
+// Функция сохранения блоков в хранилище браузера
+function saveNodes(newNodes) {
+	localStorage.setItem('nodes', JSON.stringify(newNodes));
+}
+
+// Функция получения блоков из хранилища браузера
+function loadNodes() {
+	const nodes = localStorage.getItem('nodes');
+	if (nodes) {
+		initialNodes.value = JSON.parse(nodes);
+	}
+}
+
+function handleNodeDragStop() {
+	saveNodes(initialNodes.value);
 }
 
 // remove multiple nodes from the graph
@@ -143,6 +147,10 @@ function resetTransform() {
 function toggleDarkMode() {
     dark.value = !dark.value;
 }
+
+onMounted(() => {
+	loadNodes();
+});
 </script>
 
 <template>
@@ -151,6 +159,7 @@ function toggleDarkMode() {
         @drop="onDrop"
     >
         <VueFlow
+			v-model="initialNodes"
             :class="{ dark }"
             class="basicflow"
             :nodes="initialNodes"
@@ -158,19 +167,29 @@ function toggleDarkMode() {
             :default-viewport="{ zoom: 1 }"
             :min-zoom="0.2"
             :max-zoom="4"
-            @dragover="onDragOver"
-            @dragleave="onDragLeave"
+			@dragover="onDragOver"
+			@dragleave="onDragLeave"
+			@nodeDragStop="handleNodeDragStop"
+			@update:model-value="saveNodes"
         >
             <!--<template #node-custom="customNodeProps">-->
             <!--    <CustomNode v-bind="customNodeProps"/>-->
             <!--</template>-->
             
             <template #node-info="customNodeProps">
-                <CustomNode v-bind="customNodeProps"/>
+                <CustomNode
+					v-bind="customNodeProps"
+					@remove="onRemoveNode"
+					@edit="onEditNode"
+				/>
             </template>
             
             <template #node-default="customNodeProps">
-                <CustomNode v-bind="customNodeProps"/>
+                <CustomNode
+					v-bind="customNodeProps"
+					@remove="onRemoveNode"
+					@edit="onEditNode"
+				/>
             </template>
             
             <Background
