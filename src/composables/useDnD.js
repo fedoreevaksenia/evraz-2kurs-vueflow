@@ -1,7 +1,8 @@
 import { useVueFlow } from '@vue-flow/core'
 import { ref, watch } from 'vue'
 
-let id = 0
+const nodes = JSON.parse(localStorage.getItem('nodes')) || { nodes: [] };
+let id = nodes.nodes.length + 1
 
 /**
  * @returns {string} - A unique id.

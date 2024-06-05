@@ -74,8 +74,18 @@
 }
 
 .vue-flow__node-info,
+.vue-flow__node-input,
+.vue-flow__node-output,
 .vue-flow__node-default {
     padding: 0;
+
+    &:hover {
+        //padding-right: 30px;
+
+        .node-body {
+            //padding-right: 30px;
+        }
+    }
 }
 
 .dndflow {
@@ -117,26 +127,51 @@
 
 .node {
     &-body {
-        padding: 10px;
+        padding:  10px;
         position: relative;
+
+        &:hover {
+            .node-hover {
+                display: flex;
+            }
+        }
+    }
+
+    &-hover {
+        display:                    none;
+        background-color:           #efefef;
+        border-top-right-radius:    3px;
+        border-bottom-right-radius: 3px;
+        border:                     1px solid rgba(0, 0, 0, 0.8);
+        position:                   absolute;
+        width:                      30px;
+        right:                      -31px;
+        top:                        -1px;
+        bottom:                     -1px;
+        font-size:                  12px;
+        align-items:                center;
+        justify-content:            center;
 
         &:hover {
             .node-helper {
                 display: block;
-                border:  1px solid red;
+                //border:     1px solid red;
+                //box-shadow: 0 0 7px rgba(0, 0, 0, 0.3);
             }
         }
     }
 
     &-helper {
+        z-index:  10000;
         display:  none;
         position: absolute;
-        left:     -20px;
-        right:    -20px;
-        bottom:   -20px;
-        top:      -20px;
+        left:     0;
+        right:    0;
+        bottom:   0;
+        top:      0;
 
         &__actions {
+            z-index:      10001;
             position:     absolute;
             top:          0;
             left:         100%;

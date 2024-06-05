@@ -25,6 +25,8 @@ const {
     onConnect,
     setViewport,
     toObject,
+    fromObject,
+    updateNode,
 } = useVueFlow();
 
 const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
@@ -79,20 +81,25 @@ function onEditNode(id) {
 	const node = findNode(id);
 	const blockName = prompt('Введите новое название для блока');
 	if (blockName) {
-		node.label = blockName;
+        updateNode(node.id, {
+            label: blockName,
+        });
+		// node.label = blockName;
+        saveNodes();
 	}
 }
 
 // Функция сохранения блоков в хранилище браузера
 function saveNodes(newNodes) {
-	localStorage.setItem('nodes', JSON.stringify(newNodes));
+	localStorage.setItem('nodes', JSON.stringify(toObject()));
 }
 
 // Функция получения блоков из хранилища браузера
 function loadNodes() {
 	const nodes = localStorage.getItem('nodes');
 	if (nodes) {
-		initialNodes.value = JSON.parse(nodes);
+        fromObject(JSON.parse(nodes));
+		// initialNodes.value = JSON.parse(nodes);
 	}
 }
 
@@ -185,6 +192,22 @@ onMounted(() => {
             </template>
             
             <template #node-default="customNodeProps">
+                <CustomNode
+					v-bind="customNodeProps"
+					@remove="onRemoveNode"
+					@edit="onEditNode"
+				/>
+            </template>
+            
+            <template #node-output="customNodeProps">
+                <CustomNode
+					v-bind="customNodeProps"
+					@remove="onRemoveNode"
+					@edit="onEditNode"
+				/>
+            </template>
+            
+            <template #node-input="customNodeProps">
                 <CustomNode
 					v-bind="customNodeProps"
 					@remove="onRemoveNode"
