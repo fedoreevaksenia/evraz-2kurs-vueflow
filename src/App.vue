@@ -1,5 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import {
+    ref,
+    onMounted,
+} from 'vue';
 import {
     VueFlow,
     useVueFlow,
@@ -16,6 +19,7 @@ import CustomNode from '@/components/CustomNode.vue';
 import DropzoneBackground from '@/components/DropzoneBackground.vue';
 import useDragAndDrop from './composables/useDnD';
 import Sidebar from '@/components/Sidebar.vue';
+import CustomParentNode from '@/components/CustomParentNode.vue';
 
 const {
     addNodes,
@@ -34,7 +38,66 @@ const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 // our dark mode toggle flag
 const dark = ref(false);
 
-const initialNodes = ref([]);
+let nodesId = ref(0);
+
+const initialNodes = ref([
+    
+    // { id: '1', type: 'input', label: 'node', position: { x: 250, y: 0 } },
+    // {
+    //     id: '2',
+    //     label: 'parent node',
+    //     position: { x: 100, y: 100 },
+    //     style: { backgroundColor: 'rgba(16, 185, 129, 0.5)', width: '200px', height: '200px' },
+    // },
+    // {
+    //     id: '2a',
+    //     label: 'child node',
+    //     position: { x: 10, y: 50 },
+    //     parentNode: '2',
+    // },
+    // {
+    //     id: '4',
+    //     label: 'parent node',
+    //     position: { x: 320, y: 175 },
+    //     style: { backgroundColor: 'rgba(16, 185, 129, 0.5)', width: '400px', height: '300px' },
+    // },
+    // {
+    //     id: '4a',
+    //     label: 'child node',
+    //     position: { x: 15, y: 65 },
+    //     extent: 'parent',
+    //     parentNode: '4',
+    // },
+    // {
+    //     id: '4b',
+    //     label: 'nested parent node',
+    //     position: { x: 15, y: 120 },
+    //     style: { backgroundColor: 'rgba(139, 92, 246, 0.5)', height: '150px', width: '270px' },
+    //     parentNode: '4',
+    // },
+    // {
+    //     id: '4b1',
+    //     label: 'nested child node',
+    //     position: { x: 20, y: 40 },
+    //     parentNode: '4b',
+    // },
+    // {
+    //     id: '4b2',
+    //     label: 'nested child node',
+    //     position: { x: 100, y: 100 },
+    //     parentNode: '4b',
+    // },
+    // { id: '4c', label: 'child node', position: { x: 200, y: 65 }, parentNode: '4' },
+    // {
+    //     id: '999',
+    //     type: 'input',
+    //     label: 'Drag me to extend area!',
+    //     position: { x: 20, y: 100 },
+    //     class: 'light',
+    //     expandParent: true,
+    //     parentNode: '2',
+    // },
+]);
 
 const initialEdges = ref([
     // {
@@ -60,7 +123,58 @@ function generateRandomNode() {
 
 function onAddNode() {
     // add a single node to the graph
-    addNodes(generateRandomNode());
+    // addNodes(generateRandomNode());
+    
+    let parentNodeId = nodesId.value;
+    let parentNode = {
+        id:       parentNodeId,
+        label:    'parent node',
+        type:     'parent',
+        position: { x: 100, y: 100 },
+        style:    {
+            backgroundColor: 'rgba(16, 185, 129, 0.5)',
+            width:           '400px',
+            height:          '200px',
+        },
+    };
+    nodesId.value = nodesId.value + 1;
+    addNodes(parentNode);
+    
+    let titleNode = {
+        id:         nodesId.value,
+        label:      'Сообщение',
+        type:       'input',
+        position:   { x: 0, y: 0 },
+        parentNode: parentNodeId.toString(),
+        extent:     'parent',
+        // expandParent: true,
+    };
+    nodesId.value = nodesId.value + 1;
+    addNodes(titleNode);
+    
+    let buttonNode = {
+        id:         nodesId.value,
+        label:      'Текст кнопки',
+        type:       'default',
+        position:   { x: 20, y: 20 },
+        parentNode: parentNodeId.toString(),
+        extent:     'parent',
+        // expandParent: true,
+    };
+    nodesId.value = nodesId.value + 1;
+    addNodes(buttonNode);
+    
+    buttonNode = {
+        id:         nodesId.value,
+        label:      'Текст кнопки',
+        type:       'default',
+        position:   { x: 20, y: 20 },
+        parentNode: parentNodeId.toString(),
+        extent:     'parent',
+        // expandParent: true,
+    };
+    nodesId.value = nodesId.value + 1;
+    addNodes(buttonNode);
 }
 
 function onAddNodes() {
@@ -70,41 +184,44 @@ function onAddNodes() {
 
 // remove a single node from the graph
 function onRemoveNode(id) {
-	const canRemove = confirm('Вы уверены, что хотите удалить этот блок?');
-	if (canRemove) {
-		removeNodes(id);
-	}
+    const canRemove = confirm('Вы уверены, что хотите удалить этот блок?');
+    if (canRemove) {
+        removeNodes(id);
+    }
 }
 
 // Функция редактирования блока
 function onEditNode(id) {
-	const node = findNode(id);
-	const blockName = prompt('Введите новое название для блока');
-	if (blockName) {
+    const node = findNode(id);
+    const blockName = prompt('Введите новое название для блока');
+    if (blockName) {
         updateNode(node.id, {
             label: blockName,
         });
-		// node.label = blockName;
+        // node.label = blockName;
         saveNodes();
-	}
+    }
 }
 
 // Функция сохранения блоков в хранилище браузера
 function saveNodes(newNodes) {
-	localStorage.setItem('nodes', JSON.stringify(toObject()));
+    localStorage.setItem('nodes', JSON.stringify(toObject()));
 }
 
 // Функция получения блоков из хранилища браузера
 function loadNodes() {
-	const nodes = localStorage.getItem('nodes');
-	if (nodes) {
+    const nodes = localStorage.getItem('nodes');
+    const nodesArr = JSON.parse(localStorage.getItem('nodes')) || { nodes: [] };
+    nodesId.value = nodesArr.nodes.length + 1;
+    
+    if (nodes) {
         fromObject(JSON.parse(nodes));
-		// initialNodes.value = JSON.parse(nodes);
-	}
+        // initialNodes.value = JSON.parse(nodes);
+    }
 }
 
 function handleNodeDragStop() {
-	saveNodes(initialNodes.value);
+    saveNodes(initialNodes.value);
 }
 
 // remove multiple nodes from the graph
@@ -156,7 +273,7 @@ function toggleDarkMode() {
 }
 
 onMounted(() => {
-	loadNodes();
+    loadNodes();
 });
 </script>
 
@@ -166,7 +283,7 @@ onMounted(() => {
         @drop="onDrop"
     >
         <VueFlow
-			v-model="initialNodes"
+            v-model="initialNodes"
             :class="{ dark }"
             class="basicflow"
             :nodes="initialNodes"
@@ -174,10 +291,10 @@ onMounted(() => {
             :default-viewport="{ zoom: 1 }"
             :min-zoom="0.2"
             :max-zoom="4"
-			@dragover="onDragOver"
-			@dragleave="onDragLeave"
-			@nodeDragStop="handleNodeDragStop"
-			@update:model-value="saveNodes"
+            @dragover="onDragOver"
+            @dragleave="onDragLeave"
+            @nodeDragStop="handleNodeDragStop"
+            @update:model-value="saveNodes"
         >
             <!--<template #node-custom="customNodeProps">-->
             <!--    <CustomNode v-bind="customNodeProps"/>-->
@@ -185,34 +302,42 @@ onMounted(() => {
             
             <template #node-info="customNodeProps">
                 <CustomNode
-					v-bind="customNodeProps"
-					@remove="onRemoveNode"
-					@edit="onEditNode"
-				/>
+                    v-bind="customNodeProps"
+                    @remove="onRemoveNode"
+                    @edit="onEditNode"
+                />
             </template>
             
             <template #node-default="customNodeProps">
                 <CustomNode
-					v-bind="customNodeProps"
-					@remove="onRemoveNode"
-					@edit="onEditNode"
-				/>
+                    v-bind="customNodeProps"
+                    @remove="onRemoveNode"
+                    @edit="onEditNode"
+                />
             </template>
             
             <template #node-output="customNodeProps">
                 <CustomNode
-					v-bind="customNodeProps"
-					@remove="onRemoveNode"
-					@edit="onEditNode"
-				/>
+                    v-bind="customNodeProps"
+                    @remove="onRemoveNode"
+                    @edit="onEditNode"
+                />
             </template>
             
             <template #node-input="customNodeProps">
                 <CustomNode
-					v-bind="customNodeProps"
-					@remove="onRemoveNode"
-					@edit="onEditNode"
-				/>
+                    v-bind="customNodeProps"
+                    @remove="onRemoveNode"
+                    @edit="onEditNode"
+                />
+            </template>
+            
+            <template #node-parent="customNodeProps">
+                <CustomParentNode
+                    v-bind="customNodeProps"
+                    @remove="onRemoveNode"
+                    @edit="onEditNode"
+                />
             </template>
             
             <Background
@@ -260,16 +385,16 @@ onMounted(() => {
             </Controls>
         </VueFlow>
         
-        <Sidebar />
+        <!--<Sidebar />-->
     </div>
     
-    <!--<div class="main-buttons">-->
-    <!--    <button-->
-    <!--        type="button"-->
-    <!--        @click="onAddNode"-->
-    <!--    >Новый узел-->
-    <!--    </button>-->
-    <!--</div>-->
+    <div class="main-buttons">
+        <button
+            type="button"
+            @click="onAddNode"
+        >+ Новый блок сообщения
+        </button>
+    </div>
 </template>
 
 <style lang="scss">

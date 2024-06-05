@@ -185,6 +185,12 @@
     }
 }
 
+.vue-flow__edge-path, .vue-flow__connection-path {
+    stroke:       #333333;
+    stroke-width: 1;
+    fill:         none;
+}
+
 @media screen and (min-width: 640px) {
     .dndflow {
         flex-direction: row
