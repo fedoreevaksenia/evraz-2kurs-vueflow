@@ -8,8 +8,8 @@ import {
     useVueFlow,
     Position,
 } from '@vue-flow/core';
-import {Background} from '@vue-flow/background';
-import {MiniMap} from '@vue-flow/minimap';
+import { Background } from '@vue-flow/background';
+import { MiniMap } from '@vue-flow/minimap';
 import {
     ControlButton,
     Controls,
@@ -33,7 +33,7 @@ const {
     updateNode,
 } = useVueFlow();
 
-const {onDragOver, onDrop, onDragLeave, isDragOver} = useDragAndDrop();
+const { onDragOver, onDrop, onDragLeave, isDragOver } = useDragAndDrop();
 
 // our dark mode toggle flag
 const dark = ref(false);
@@ -41,62 +41,61 @@ const dark = ref(false);
 const nodesId = ref(0);
 
 const initialNodes = ref([
-
-// { id: '1', type: 'input', label: 'node', position: { x: 250, y: 0 } },
-// {
-//     id: '2',
-//     label: 'parent node',
-//     position: { x: 100, y: 100 },
-//     style: { backgroundColor: 'rgba(16, 185, 129, 0.5)', width: '200px', height: '200px' },
-// },
-// {
-//     id: '2a',
-//     label: 'child node',
-//     position: { x: 10, y: 50 },
-//     parentNode: '2',
-// },
-// {
-//     id: '4',
-//     label: 'parent node',
-//     position: { x: 320, y: 175 },
-//     style: { backgroundColor: 'rgba(16, 185, 129, 0.5)', width: '400px', height: '300px' },
-// },
-// {
-//     id: '4a',
-//     label: 'child node',
-//     position: { x: 15, y: 65 },
-//     extent: 'parent',
-//     parentNode: '4',
-// },
-// {
-//     id: '4b',
-//     label: 'nested parent node',
-//     position: { x: 15, y: 120 },
-//     style: { backgroundColor: 'rgba(139, 92, 246, 0.5)', height: '150px', width: '270px' },
-//     parentNode: '4',
-// },
-// {
-//     id: '4b1',
-//     label: 'nested child node',
-//     position: { x: 20, y: 40 },
-//     parentNode: '4b',
-// },
-// {
-//     id: '4b2',
-//     label: 'nested child node',
-//     position: { x: 100, y: 100 },
-//     parentNode: '4b',
-// },
-// { id: '4c', label: 'child node', position: { x: 200, y: 65 }, parentNode: '4' },
-// {
-//     id: '999',
-//     type: 'input',
-//     label: 'Drag me to extend area!',
-//     position: { x: 20, y: 100 },
-//     class: 'light',
-//     expandParent: true,
-//     parentNode: '2',
-// },
+    // { id: '1', type: 'input', label: 'node', position: { x: 250, y: 0 } },
+    // {
+    //     id: '2',
+    //     label: 'parent node',
+    //     position: { x: 100, y: 100 },
+    //     style: { backgroundColor: 'rgba(16, 185, 129, 0.5)', width: '200px', height: '200px' },
+    // },
+    // {
+    //     id: '2a',
+    //     label: 'child node',
+    //     position: { x: 10, y: 50 },
+    //     parentNode: '2',
+    // },
+    // {
+    //     id: '4',
+    //     label: 'parent node',
+    //     position: { x: 320, y: 175 },
+    //     style: { backgroundColor: 'rgba(16, 185, 129, 0.5)', width: '400px', height: '300px' },
+    // },
+    // {
+    //     id: '4a',
+    //     label: 'child node',
+    //     position: { x: 15, y: 65 },
+    //     extent: 'parent',
+    //     parentNode: '4',
+    // },
+    // {
+    //     id: '4b',
+    //     label: 'nested parent node',
+    //     position: { x: 15, y: 120 },
+    //     style: { backgroundColor: 'rgba(139, 92, 246, 0.5)', height: '150px', width: '270px' },
+    //     parentNode: '4',
+    // },
+    // {
+    //     id: '4b1',
+    //     label: 'nested child node',
+    //     position: { x: 20, y: 40 },
+    //     parentNode: '4b',
+    // },
+    // {
+    //     id: '4b2',
+    //     label: 'nested child node',
+    //     position: { x: 100, y: 100 },
+    //     parentNode: '4b',
+    // },
+    // { id: '4c', label: 'child node', position: { x: 200, y: 65 }, parentNode: '4' },
+    // {
+    //     id: '999',
+    //     type: 'input',
+    //     label: 'Drag me to extend area!',
+    //     position: { x: 20, y: 100 },
+    //     class: 'light',
+    //     expandParent: true,
+    //     parentNode: '2',
+    // },
 ]);
 
 const initialEdges = ref([
@@ -108,19 +107,6 @@ const initialEdges = ref([
     // },
 ]);
 
-function generateRandomNode() {
-    return {
-        id: Math.random().toString(),
-        // position:       { x: Math.random() * 500, y: Math.random() * 500 },
-        position:       { x: 16, y: 75 },
-        label:          'Random Node',
-        connectable:    true,
-        type:           'default', // You can omit this as it's the fallback type
-        targetPosition: Position.Top, // or Bottom, Left, Right,
-        sourcePosition: Position.Bottom, // or Top, Left, Right,
-    };
-}
-
 function onAddNode() {
     // add a single node to the graph
 //     addNodes(generateRandomNode());
@@ -128,13 +114,13 @@ function onAddNode() {
     let parentNodeId = nodesId.value;
     let parentNode = {
         id:       parentNodeId,
-        label: 'Блок ответа',
+        label:    'Блок ответа',
         type:     'parent',
-        position: {x: 50, y: 50},
+        position: { x: 50, y: 50 },
         style:    {
             backgroundColor: 'rgba(16, 185, 129, 0.5)',
-            width: '350px',
-            height: '150px',
+            width:           '350px',
+            height:          '150px',
         },
     };
     nodesId.value = nodesId.value + 1;
@@ -144,7 +130,7 @@ function onAddNode() {
         id:         nodesId.value,
         label:      'Сообщение',
         type:       'input',
-        position: {x: 100, y: 40},
+        position:   { x: 100, y: 40 },
         parentNode: parentNodeId.toString(),
         extent:     'parent',
         // expandParent: true,
@@ -156,30 +142,25 @@ function onAddNode() {
         id:         nodesId.value,
         label:      'Текст кнопки',
         type:       'default',
-        position: {x: 20, y: 95},
+        position:   { x: 20, y: 95 },
         parentNode: parentNodeId.toString(),
         extent:     'parent',
         // expandParent: true,
     };
     nodesId.value = nodesId.value + 1;
     addNodes(buttonNode);
-
+    
     buttonNode = {
         id:         nodesId.value,
         label:      'Текст кнопки',
         type:       'default',
-        position: {x: 180, y: 95},
+        position:   { x: 180, y: 95 },
         parentNode: parentNodeId.toString(),
         extent:     'parent',
         // expandParent: true,
     };
     nodesId.value = nodesId.value + 1;
     addNodes(buttonNode);
-}
-
-function onAddNodes() {
-    // add multiple nodes to the graph
-    addNodes(Array.from({ length: 10 }, generateRandomNode));
 }
 
 // Функция редактирования блока
@@ -236,26 +217,26 @@ function logToObject() {
  * Resets the current viewport transformation (zoom & pan)
  */
 function resetTransform() {
-    setViewport({x: 0, y: 0, zoom: 1});
+    setViewport({ x: 0, y: 0, zoom: 1 });
 }
 
 function onAdd(id) {
-    let node = findNode(id)
-    let result = node.style.width.replace("px", "");
-    let dlina = parseInt(result) + 160
-    let pobeda = dlina.toString()+'px'
-    updateNode(id,{
+    let node = findNode(id);
+    let result = node.style.width.replace('px', '');
+    let dlina = parseInt(result) + 160;
+    let pobeda = dlina.toString() + 'px';
+    updateNode(id, {
         width: pobeda,
     });
     saveNodes(updateNode);
-    let pravo = dlina-170
+    let pravo = dlina - 170;
     let buttonNode = {
-        id: nodesId.value,
-        label: 'Текст кнопки',
-        type: 'default',
-        position: {x: pravo, y: 95},
+        id:         nodesId.value,
+        label:      'Текст кнопки',
+        type:       'default',
+        position:   { x: pravo, y: 95 },
         parentNode: id.toString(),
-        extent: 'parent',
+        extent:     'parent',
     };
     nodesId.value = nodesId.value + 1;
     addNodes(buttonNode);
@@ -263,17 +244,17 @@ function onAdd(id) {
 }
 
 function onRemoveNode(id) {
-    let node = findNode(id)
+    let node = findNode(id);
     const canRemove = confirm('Вы уверены, что хотите удалить этот блок?');
     if (canRemove) {
         removeNodes(id);
     }
     if (node.type === 'default') {
-        let code = findNode(node.parentNode)
-        let result = code.width.replace("px", "");
-        let dlina = parseInt(result) - 150
-        let pobeda = dlina.toString()+'px'
-        updateNode(node.parentNode,{
+        let code = findNode(node.parentNode);
+        let result = code.width.replace('px', '');
+        let dlina = parseInt(result) - 150;
+        let pobeda = dlina.toString() + 'px';
+        updateNode(node.parentNode, {
             width: pobeda,
         });
         saveNodes(updateNode);
@@ -312,7 +293,7 @@ onMounted(() => {
             <!--<template #node-custom="customNodeProps">-->
             <!--    <CustomNode v-bind="customNodeProps"/>-->
             <!--</template>-->
-
+            
             <template #node-info="customNodeProps">
                 <CustomNode
                     v-bind="customNodeProps"
@@ -328,7 +309,7 @@ onMounted(() => {
                     @edit="onEditNode"
                 />
             </template>
-
+            
             <template #node-output="customNodeProps">
                 <CustomNode
                     v-bind="customNodeProps"
@@ -351,21 +332,21 @@ onMounted(() => {
                     @add="onAdd"
                 />
             </template>
-
+            
             <Background
                 pattern-color="#aaa"
                 :gap="16"
             />
-
+            
             <MiniMap/>
-
+            
             <DropzoneBackground
                 :style="{
                 backgroundColor: isDragOver ? '#e7f3ff' : 'transparent',
                 transition: 'background-color 0.2s ease',
             }"
             />
-
+            
             <Controls position="top-right">
                 <ControlButton
                     title="Reset Transform"
@@ -373,7 +354,7 @@ onMounted(() => {
                 >
                     <Icon name="reset"/>
                 </ControlButton>
-
+                
                 <ControlButton
                     title="Toggle Dark Mode"
                     @click="toggleDarkMode"
@@ -387,7 +368,7 @@ onMounted(() => {
                         name="moon"
                     />
                 </ControlButton>
-
+                
                 <ControlButton
                     title="Log `toObject`"
                     @click="logToObject"
@@ -396,7 +377,7 @@ onMounted(() => {
                 </ControlButton>
             </Controls>
         </VueFlow>
-
+        
         <!--<Sidebar />-->
     </div>
     <div class="main-buttons">
