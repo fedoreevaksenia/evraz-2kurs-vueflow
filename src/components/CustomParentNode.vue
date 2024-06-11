@@ -5,7 +5,7 @@ import { ref } from 'vue';
 // props were passed from the slot using `v-bind="customNodeProps"`
 const props = defineProps(['label', 'id'])
 
-const emit = defineEmits([ 'remove', 'edit' ]);
+const emit = defineEmits([ 'add', 'remove' ]);
 
 const inputValue = ref('')
 </script>
@@ -17,20 +17,22 @@ const inputValue = ref('')
             <span class="material-symbols-outlined">
                 edit
             </span>
-            
             <div class="node-helper">
                 <div class="node-helper__actions">
                     <button
-                        class="node-helper__action"
-                        @click="emit('new-button', id)"
+                    class="node-helper__action"
+                    @click="emit('add', id)"
                     >
-                        Новая кнопка
+                        Добавить кнопку
                     </button>
+<!--                    <button-->
+<!--                        class="node-helper__action"-->
+<!--                        @click="emit('remove', id)"-->
+<!--                    >-->
+<!--                        Удалить блок-->
+<!--                    </button>-->
                 </div>
             </div>
         </div>
     </div>
-    <!--<div class="custom-node-container">-->
-    <!--    <input class="nodrag" v-model="inputValue" />-->
-    <!--</div>-->
 </template>
