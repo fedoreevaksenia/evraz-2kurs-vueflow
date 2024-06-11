@@ -128,13 +128,13 @@ function onAddNode() {
     let parentNodeId = nodesId.value;
     let parentNode = {
         id:       parentNodeId,
-        label:    'parent node',
+        label: 'Блок ответа',
         type:     'parent',
-        position: { x: 100, y: 100 },
+        position: {x: 50, y: 50},
         style:    {
             backgroundColor: 'rgba(16, 185, 129, 0.5)',
-            width:           '400px',
-            height:          '200px',
+            width: '350px',
+            height: '150px',
         },
     };
     nodesId.value = nodesId.value + 1;
@@ -144,7 +144,7 @@ function onAddNode() {
         id:         nodesId.value,
         label:      'Сообщение',
         type:       'input',
-        position:   { x: 0, y: 0 },
+        position: {x: 100, y: 40},
         parentNode: parentNodeId.toString(),
         extent:     'parent',
         // expandParent: true,
@@ -156,7 +156,7 @@ function onAddNode() {
         id:         nodesId.value,
         label:      'Текст кнопки',
         type:       'default',
-        position:   { x: 20, y: 20 },
+        position: {x: 20, y: 95},
         parentNode: parentNodeId.toString(),
         extent:     'parent',
         // expandParent: true,
@@ -168,72 +168,18 @@ function onAddNode() {
         id:         nodesId.value,
         label:      'Текст кнопки',
         type:       'default',
-        position:   { x: 20, y: 20 },
+        position: {x: 180, y: 95},
         parentNode: parentNodeId.toString(),
         extent:     'parent',
         // expandParent: true,
     };
     nodesId.value = nodesId.value + 1;
     addNodes(buttonNode);
-    
-    //
-    // let parentNodeId = nodesId.value;
-    // let parentNode = {
-    //     id: parentNodeId,
-    //     label: 'Блок ответа',
-    //     type: 'parent',
-    //     position: {x: 30, y: 30},
-    //     style: {
-    //         backgroundColor: 'rgba(16, 185, 129, 0.5)',
-    //         width: '350px',
-    //         height: '150px',
-    //     },
-    // };
-    // nodesId.value = nodesId.value + 1;
-    // addNodes(parentNode);
-    // let titleNode = {
-    //     id: nodesId.value,
-    //     label: 'Сообщение',
-    //     type: 'input',
-    //     position: {x: 100, y: 40},
-    //     parentNode: parentNodeId.toString(),
-    //     extent: 'parent',
-    // };
-    // nodesId.value = nodesId.value + 1;
-    // addNodes(titleNode);
-    // let buttonNode = {
-    //     id: nodesId.value,
-    //     label: 'Текст кнопки',
-    //     type: 'default',
-    //     position: {x: 20, y: 95},
-    //     parentNode: parentNodeId.toString(),
-    //     extent: 'parent',
-    // };
-    // nodesId.value = nodesId.value + 1;
-    // addNodes(buttonNode);
-    // buttonNode = {
-    //     id: nodesId.value,
-    //     label: 'Текст кнопки',
-    //     type: 'default',
-    //     position: {x: 180, y: 95},
-    //     parentNode: parentNodeId.toString(),
-    //     extent: 'parent',
-    // };
-    // nodesId.value = nodesId.value + 1;
-    // addNodes(buttonNode);
 }
 
 function onAddNodes() {
     // add multiple nodes to the graph
     addNodes(Array.from({ length: 10 }, generateRandomNode));
-}
-
-// remove a single node from the graph
-function onRemoveNode(id) {
-    const canRemove = confirm('Вы уверены, что хотите удалить этот блок?');
-    if (canRemove) {
-        removeNodes(id);
-    }
 }
 
 // Функция редактирования блока
@@ -268,27 +214,6 @@ function loadNodes() {
 
 function handleNodeDragStop() {
     saveNodes(initialNodes.value);
-}
-
-// remove multiple nodes from the graph
-function onRemoveNodes() {
-    removeNodes([ '1', '2' ]);
-}
-
-function onSomeEvent(nodeId) {
-    // const node = initialNodes.value.find((node) => node.id == nodeId)
-    const node = findNode('1');
-    if (node) {
-        node.label = 'Node custom';
-    }
-    // node.data = {
-    //     ...node.data,
-    //     hello: 'world',
-    // }
-    //
-    // // you can also mutate properties like `selectable` or `draggable`
-    // node.selectable = false
-    // node.draggable = false
 }
 
 /**
@@ -419,12 +344,11 @@ onMounted(() => {
                     @edit="onEditNode"
                 />
             </template>
-
+            
             <template #node-parent="customNodeProps">
                 <CustomParentNode
                     v-bind="customNodeProps"
-                    @remove="onRemoveNode"
-                    @edit="onEditNode"
+                    @add="onAdd"
                 />
             </template>
 
