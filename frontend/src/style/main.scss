@@ -18,8 +18,9 @@
 html,
 body,
 #app {
-    margin: 0;
-    height: 100%;
+    margin:    0;
+    height:    100%;
+    font-size: 16px !important;
 }
 
 #app {
@@ -32,7 +33,7 @@ body,
 }
 
 .vue-flow__minimap {
-    transform: scale(75%);
+    transform:        scale(75%);
     transform-origin: bottom right;
 }
 
@@ -48,6 +49,6 @@ body,
         padding:          5px 10px;
         border-radius:    6px;
         cursor:           pointer;
-        font-size: 18px;
+        font-size:        18px;
     }
 }
