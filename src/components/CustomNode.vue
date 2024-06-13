@@ -35,6 +35,7 @@ const inputValue = ref('')
                     >
                         Редактировать
                     </button>
+
                 </div>
             </div>
         </div>
