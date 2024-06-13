@@ -50,6 +50,8 @@ const dark = ref(false);
 
 const nodesId = ref(0);
 const schemeName = ref('');
+const botUserName = ref('');
+const botLink = ref('');
 const activeBot = ref(false);
 const initialNodes = ref([
     // { id: '1', type: 'input', label: 'node', position: { x: 250, y: 0 } },
@@ -130,14 +132,15 @@ function onAddNode() {
         style:    {
             backgroundColor: 'rgba(16, 185, 129, 0.5)',
             width:           '350px',
-            height:          '150px',
+            height:          '250px',
         },
     };
     nodesId.value = nodesId.value + 1;
     addNodes(parentNode);
     
+    let titleNodeId = nodesId.value;
     let titleNode = {
-        id:         nodesId.value,
+        id:         titleNodeId,
         label:      'Сообщение',
         type:       'input',
         position:   { x: 100, y: 40 },
@@ -148,11 +151,12 @@ function onAddNode() {
     nodesId.value = nodesId.value + 1;
     addNodes(titleNode);
     
+    let buttonNode1 = nodesId.value;
     let buttonNode = {
-        id:         nodesId.value,
+        id:         buttonNode1,
         label:      'Текст кнопки',
         type:       'default',
-        position:   { x: 20, y: 95 },
+        position:   { x: 20, y: 155 },
         parentNode: parentNodeId.toString(),
         extent:     'parent',
         // expandParent: true,
@@ -160,17 +164,31 @@ function onAddNode() {
     nodesId.value = nodesId.value + 1;
     addNodes(buttonNode);
     
+    let buttonNode2 = nodesId.value;
     buttonNode = {
-        id:         nodesId.value,
+        id:         buttonNode2,
         label:      'Текст кнопки',
         type:       'default',
-        position:   { x: 180, y: 95 },
+        position:   { x: 180, y: 155 },
         parentNode: parentNodeId.toString(),
         extent:     'parent',
         // expandParent: true,
     };
     nodesId.value = nodesId.value + 1;
     addNodes(buttonNode);
+    
+    addEdges({
+        id:       `e${ titleNodeId }-${ buttonNode1 }`,
+        source:   titleNodeId.toString(),
+        target:   buttonNode1.toString(),
+        animated: true,
+    });
+    addEdges({
+        id:       `e${ titleNodeId }-${ buttonNode2 }`,
+        source:   titleNodeId.toString(),
+        target:   buttonNode2.toString(),
+        animated: true,
+    });
 }
 
 // Функция редактирования блока
@@ -210,6 +228,7 @@ function loadNodes() {
  * You can add additional properties to your new edge (like a type or label) or block the creation altogether by not calling `addEdges`
  */
 onConnect((connection) => {
+    connection.animated = true;
     addEdges(connection);
 });
 
@@ -286,6 +305,8 @@ async function getSchemeData() {
         }
         
         schemeName.value = response.data.message.name;
+        botUserName.value = response.data.message.botUserName;
+        botLink.value = response.data.message.botLink;
     }
     catch (err) {
         console.error('ERROR GET SCHEME');
@@ -463,14 +484,23 @@ onMounted(() => {
         >← На главную
         </div>
         <div class="scheme__name">
-            {{ schemeName }}
+            <div>
+                {{ schemeName }}
+                
+                <span
+                    class="material-symbols-outlined"
+                    @click="changeSchemeName"
+                >
+                    edit
+                </span>
+            </div>
             
-            <span
-                class="material-symbols-outlined"
-                @click="changeSchemeName"
-            >
-                edit
-            </span>
+            <div>
+                <a
+                    :href="botLink"
+                    target="_blank"
+                >{{ botUserName }}</a>
+            </div>
         </div>
         <button
             type="button"
@@ -497,12 +527,23 @@ onMounted(() => {
         padding:          10px;
         box-shadow:       0 0 7px rgba(0, 0, 0, 0.2);
         display:          flex;
+        flex-direction:   column;
         align-items:      center;
         justify-content:  center;
         
         span:hover {
             cursor: pointer;
             color:  #268f61;
+        }
+        
+        > div {
+            display:         flex;
+            align-items:     center;
+            justify-content: center;
+            
+            &:last-child {
+                font-size: 1rem;
+            }
         }
     }
 }

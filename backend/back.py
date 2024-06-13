@@ -98,7 +98,9 @@ def get_scheme(scheme):
     data = { 'message': 'error', 'status_code': 400 }
     client = Database()
     try:
-        result = client.query('SELECT id, name, front_schema, "botId" FROM schemes WHERE id = %s', [scheme])
+        result = client.query('SELECT schemes.id, name, front_schema, "botId", bots."botUserName", bots."botLink" FROM schemes INNER JOIN bots ON bots.id = schemes."botId" WHERE schemes.id = %s', [scheme])
+        if result is None:
+            return data, 400
         if len(result):
             data = result[0]
 

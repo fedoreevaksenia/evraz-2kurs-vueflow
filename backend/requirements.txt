@@ -1,7 +1,7 @@
-pip~=24.0
-asyncio~=3.4.3
-setuptools~=56.0.0
-telebot~=0.0.5
-flask~=3.0.3
-psycopg2~=2.9.9
+pip==24.0
+asyncio==3.4.3
+setuptools==56.0.0
+telebot==0.0.5
+flask==3.0.3
+psycopg2==2.9.9
 python-dotenv==0.21.1
